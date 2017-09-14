@@ -13,13 +13,15 @@ export default class ChatWindow extends Component {
     super();
     this.state = {
       messages: [],
-      text: ''
+      text: '',
+      userName: ''
     };
 
     this.handleChange = this.handleChange.bind( this );
     this.createMessage = this.createMessage.bind( this );
     this.editMessage = this.editMessage.bind( this );
     this.removeMessage = this.removeMessage.bind( this );
+    this.handleUsername = this.handleUsername.bind(this);
   }
 
   componentDidMount() {
@@ -32,6 +34,10 @@ export default class ChatWindow extends Component {
     this.setState({ text: event.target.value });
   }
 
+  handleUsername(e) {
+    this.setState({userName: e.target.value});
+  }
+
   createMessage( event ) {
     const { text } = this.state;
     if ( event.key === "Enter" && text.length !== 0 ) {
@@ -42,6 +48,7 @@ export default class ChatWindow extends Component {
       this.setState({ text: '' });
     }
   }
+
 
   editMessage( id, text ) {
     console.log( 'editMessage:', id, text ); 
@@ -63,7 +70,7 @@ export default class ChatWindow extends Component {
           <div id="ChatWindow__messagesChildContainer">
             {
               this.state.messages.map( message => (
-                <Message id={ message.id} key={ message.id } text={ message.text } time={ message.time } edit={ this.editMessage } remove={ this.removeMessage } />
+                <Message id={ message.id} key={ message.id } text={ message.text } time={ message.time } user={this.state.userName} edit={ this.editMessage } remove={ this.removeMessage } />
               ))
             }
           </div>
@@ -74,7 +81,13 @@ export default class ChatWindow extends Component {
                  onChange={ this.handleChange }
                  value={ this.state.text }
           />
+          <input placeholder="Username"
+                 onKeyPress={this.createMessage}
+                 onChange={this.handleUsername}
+                 value={this.state.userName}
+          />
         </div>
+
       </div>
     )
   }
